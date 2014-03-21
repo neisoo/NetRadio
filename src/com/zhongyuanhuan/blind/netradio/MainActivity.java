@@ -90,6 +90,10 @@ public class MainActivity extends Activity {
     		msg += " Z";
     	}
     	
+    	msg += Integer.toString(x_pos)+" - "+Integer.toString(x_neg)+"  "+
+    			Integer.toString(y_pos)+" - "+Integer.toString(y_neg)+"  "+
+    			Integer.toString(z_pos)+" - "+Integer.toString(z_neg);
+    	
     	mTextView.setText(msg);
     	Vibrator vib = (Vibrator) MainActivity.this.getSystemService(Service.VIBRATOR_SERVICE);
         vib.vibrate(500);
