@@ -63,6 +63,9 @@ public class ShakeDetectActivity implements SensorEventListener {
 
 	private float last_x = 0, last_y=0, last_z=0; 
 
+	private List<Float> zList = new ArrayList<Float>();
+	private final int MAX_Z_LIST_SIZE = 10;
+
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -74,7 +77,10 @@ public class ShakeDetectActivity implements SensorEventListener {
 			float x = event.values[SensorManager.DATA_X];
 			float y = event.values[SensorManager.DATA_Y];
 			float z = event.values[SensorManager.DATA_Z];
-			
+
+			if (zList.size() >= MAX_Z_LIST_SIZE) zList.remove(0);
+			zList.add(z);
+
 			if (last_x != 0 && last_y != 0 && last_z != 0 && (last_x != x || last_y != y || last_z != z)) {
 				DataPoint dp = new DataPoint(last_x-x, last_y-y, last_z-z, curTime);
 				//Log.i("XYZ",Float.toString(dp.x)+"   "+Float.toString(dp.y)+"   "+Float.toString(dp.z)+"   ");
@@ -158,6 +164,21 @@ public class ShakeDetectActivity implements SensorEventListener {
 		}
 	}
 
+	public boolean isScreenUp() {		
+		Float sum = (float) 0;
+		for(Float z: zList){
+			sum += z;
+		}
+		return (sum / zList.size() > 4);
+	}
+
+	public boolean isScreenDown() {		
+		Float sum = (float) 0;
+		for(Float z: zList){
+			sum += z;
+		}
+		return (sum / zList.size() < -4);
+	}
 
 }
 
